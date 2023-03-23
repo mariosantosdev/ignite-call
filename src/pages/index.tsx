@@ -1,3 +1,4 @@
+import { Heading } from '@ignite-ui/react'
 import Head from 'next/head'
 
 export default function Home() {
@@ -10,7 +11,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
      
-     <h1>Ignite Call</h1>
+     <Heading as='h1'>Ignite Call</Heading>
     </>
   )
 }
