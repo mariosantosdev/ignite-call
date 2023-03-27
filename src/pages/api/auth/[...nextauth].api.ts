@@ -1,5 +1,7 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import NextAuth, { NextAuthOptions } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
+import { PrismaAdapter } from '~/lib/auth/prisma-adapter'
 
 const scopes = [
   'https://www.googleapis.com/auth/userinfo.email',
@@ -17,6 +19,13 @@ export const authOptions: NextAuthOptions = {
           scope: scopes.join(' '),
         },
       },
+      profile: (profile: GoogleProfile) => ({
+        id: profile.sub,
+        name: profile.name,
+        username: '',
+        email: profile.email,
+        avatar_url: profile.picture,
+      }),
     }),
   ],
 
@@ -28,7 +37,13 @@ export const authOptions: NextAuthOptions = {
 
       return true
     },
+    session: ({ session, user }) => ({ ...session, user }),
   },
 }
 
-export default NextAuth(authOptions)
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
+  return await NextAuth(req, res, {
+    ...authOptions,
+    adapter: PrismaAdapter(req, res),
+  })
+}
