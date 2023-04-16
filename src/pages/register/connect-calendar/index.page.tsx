@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { ArrowRight, Check } from 'phosphor-react'
 import { AuthError, ConnectBox, ConnectItem, Container, Header } from './styles'
 
-export default function Register() {
+export default function ConnectCalendar() {
   const session = useSession()
   const router = useRouter()
 
@@ -17,7 +17,7 @@ export default function Register() {
   return (
     <>
       <Head>
-        <title>Ignite Call - Registrar</title>
+        <title>Ignite Call - Conectar Calendário</title>
         <meta name="robots" content="noindex" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
