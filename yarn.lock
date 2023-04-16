@@ -2166,10 +2166,10 @@ react-dom@18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react-hook-form@^7.43.8:
-  version "7.43.8"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.43.8.tgz#189fe4fb31e15c280b529cc3041249ed12108d75"
-  integrity sha512-BQm+Ge5KjTk1EchDBRhdP8Pkb7MArO2jFF+UWYr3rtvh6197khi22uloLqlWeuY02ItlCzPunPsFt1/q9wQKnw==
+react-hook-form@7.44.0-rc.1:
+  version "7.44.0-rc.1"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.44.0-rc.1.tgz#165432adadf263d200a1518b7b1dc68ee8a1cff8"
+  integrity sha512-bHPZDqbRF0N89XNi42qgX5q4+havYLg2XryNW0FTq4i6VW9lfP8dXHlRhaHNxdavJH8uGngXgzJqKPcqY7j3rw==
 
 react-is@^16.13.1:
   version "16.13.1"
