@@ -8,15 +8,13 @@ import {
 } from '@ignite-ui/react'
 import Head from 'next/head'
 import {
-  Container,
-  FormError,
-  Header,
   IntervalBox,
   IntervalDay,
   IntervalInputs,
   IntervalItem,
   IntervalsContainer,
 } from './styles'
+import { Container, FormError, Header } from '../styles'
 import { ArrowRight } from 'phosphor-react'
 import {
   Controller,
