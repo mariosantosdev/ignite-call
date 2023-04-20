@@ -6,10 +6,12 @@ import {
   TimePickerItem,
   TimePickerList,
 } from './styles'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dayjs from 'dayjs'
 import { api } from '~/lib/axios'
 import { useRouter } from 'next/router'
+import { useQuery } from '@tanstack/react-query'
+import { Text } from '@ignite-ui/react'
 
 interface Availability {
   possibleTimes: number[]
@@ -17,25 +19,34 @@ interface Availability {
 }
 
 export function CalendarStep() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [availability, setAvailability] = useState<Availability | null>(null)
-
   const router = useRouter()
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const isDateSelected = Boolean(selectedDate)
   const username = String(router.query.username)
 
-  useEffect(() => {
-    if (selectedDate) {
-      api
-        .get<Availability>(`/users/${username}/availability`, {
+  const selectedDateWithoutTime = isDateSelected
+    ? dayjs(selectedDate).format('YYYY-MM-DD')
+    : null
+
+  const { data: availability, isLoading } = useQuery<Availability>(
+    ['availability', selectedDateWithoutTime],
+    async () => {
+      const response = await api.get<Availability>(
+        `/users/${username}/availability`,
+        {
           params: {
             date: dayjs(selectedDate).format('YYYY-MM-DD'),
           },
-        })
-        .then((response) => setAvailability(response.data))
-    }
-  }, [selectedDate, username])
+        },
+      )
+
+      return response.data
+    },
+    {
+      enabled: isDateSelected,
+    },
+  )
 
   const weekDay = isDateSelected ? dayjs(selectedDate).format('dddd') : ''
   const describeDate = isDateSelected
@@ -52,6 +63,7 @@ export function CalendarStep() {
           </TimePickerHeader>
 
           <TimePickerList>
+            {isLoading && <Text size="sm">Carregando...</Text>}
             {availability?.possibleTimes.map((hour) => (
               <TimePickerItem
                 key={hour}
