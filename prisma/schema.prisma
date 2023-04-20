@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-    provider = "mongodb"
+    provider = "mysql"
     url      = env("DATABASE_URL")
 }
 
 model User {
-    id         String  @id @default(auto()) @map("_id") @db.ObjectId
+    id         String  @id @default(uuid())
     username   String  @unique
     name       String
     email      String? @unique
@@ -29,8 +29,8 @@ model User {
 }
 
 model Account {
-    id                  String  @id @default(auto()) @map("_id") @db.ObjectId
-    user_id             String  @db.ObjectId
+    id                  String  @id @default(uuid())
+    user_id             String
     type                String
     provider            String
     provider_account_id String
@@ -49,9 +49,9 @@ model Account {
 }
 
 model Session {
-    id            String   @id @default(auto()) @map("_id") @db.ObjectId
+    id            String   @id @default(uuid())
     session_token String   @unique
-    user_id       String   @db.ObjectId
+    user_id       String
     expires       DateTime
     user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
@@ -59,26 +59,26 @@ model Session {
 }
 
 model UserTimeInterval {
-    id                    String @id @default(auto()) @map("_id") @db.ObjectId
+    id                    String @id @default(uuid())
     week_day              Int
     time_start_in_minutes Int
     time_end_in_minutes   Int
 
     user    User   @relation(fields: [user_id], references: [id])
-    user_id String @db.ObjectId
+    user_id String
 
     @@map("user_time_interval")
 }
 
 model Scheduling {
-    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    id           String   @id @default(uuid())
     date         DateTime
     name         String
     email        String
     observations String?
     created_at   DateTime @default(now())
 
-    user_id String @db.ObjectId
+    user_id String
     user    User   @relation(fields: [user_id], references: [id])
 
     @@map("schedulings")
