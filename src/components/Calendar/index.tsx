@@ -10,6 +10,9 @@ import {
 import { getWeekDays } from '~/utils/get-week-days'
 import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/router'
+import { api } from '~/lib/axios'
 
 interface CalendarWeek {
   week: number
@@ -18,18 +21,43 @@ interface CalendarWeek {
 
 type CalendarWeeks = CalendarWeek[]
 
+interface BlockedDates {
+  blockedWeekDays: number[]
+}
+
 interface CalendarDaysProps {
   selectedDate?: Date | null
   onDateSelect: (date: Date) => void
 }
 
 export function Calendar({ onDateSelect }: CalendarDaysProps) {
+  const router = useRouter()
   const [currentDate, setCurrentDate] = useState(() => dayjs().set('date', 1))
+
+  const username = String(router.query.username)
   const shortWeekDays = getWeekDays({ short: true })
   const currentMonth = currentDate.format('MMMM')
   const currentYear = currentDate.format('YYYY')
 
+  const { data: blockedDates, isLoading } = useQuery<BlockedDates>(
+    ['blockedDates', currentDate.get('year'), currentDate.get('month')],
+    async () => {
+      const response = await api.get<BlockedDates>(
+        `/users/${username}/blocked-dates`,
+        {
+          params: {
+            year: currentDate.get('year'),
+            month: currentDate.get('month'),
+          },
+        },
+      )
+
+      return response.data
+    },
+  )
+
   const calendarWeeks = useMemo(() => {
+    if (isLoading) return []
     const daysInMonthArray = Array.from({
       length: currentDate.daysInMonth(),
     }).map((_, index) => currentDate.set('date', index + 1))
@@ -57,7 +85,7 @@ export function Calendar({ onDateSelect }: CalendarDaysProps) {
     )
 
     return calendarWeeks
-  }, [currentDate])
+  }, [currentDate, isLoading])
 
   const handlePreviousMonth = () => {
     const previousMonthDate = currentDate.subtract(1, 'month')
@@ -102,7 +130,10 @@ export function Calendar({ onDateSelect }: CalendarDaysProps) {
                   {day !== null ? (
                     <CalendarDay
                       onClick={() => onDateSelect(day.toDate())}
-                      disabled={day.endOf('day').isBefore(new Date())}
+                      disabled={
+                        day.endOf('day').isBefore(new Date()) ||
+                        blockedDates?.blockedWeekDays.includes(day.get('day'))
+                      }
                     >
                       {day?.get('date')}
                     </CalendarDay>
