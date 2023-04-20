@@ -7,7 +7,6 @@ import {
   Text,
   TextArea,
 } from '@ignite-ui/react'
-import Head from 'next/head'
 import { ArrowRight } from 'phosphor-react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -19,6 +18,7 @@ import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '~/pages/api/auth/[...nextauth].api'
 import { api } from '~/lib/axios'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 
 const updateProfileFormSchema = z.object({
   bio: z.string(),
@@ -47,12 +47,7 @@ export default function UpdateProfile() {
 
   return (
     <>
-      <Head>
-        <title>Ignite Call - Atualizar Perfil</title>
-        <meta name="robots" content="noindex" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <NextSeo title="Ignite Call - Atualize seu perfil" noindex />
 
       <Container>
         <Header>

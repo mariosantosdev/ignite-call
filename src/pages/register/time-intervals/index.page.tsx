@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
 } from '@ignite-ui/react'
-import Head from 'next/head'
 import {
   IntervalBox,
   IntervalDay,
@@ -28,6 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { converTimeStringToMinutes } from '~/utils/convert-time-string-to-minutes'
 import { api } from '~/lib/axios'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 
 const timeIntervalsFormSchema = z.object({
   intervals: z
@@ -108,12 +108,7 @@ export default function TimeIntervals() {
 
   return (
     <>
-      <Head>
-        <title>Ignite Call - Horários</title>
-        <meta name="robots" content="noindex" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <NextSeo title="Ignite Call - Horários" noindex />
 
       <Container>
         <Header>
