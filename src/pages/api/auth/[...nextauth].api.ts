@@ -22,6 +22,9 @@ export function buildNextAuthOptions(
         authorization: {
           params: {
             scope: scopes.join(' '),
+            prompt: 'consent',
+            access_type: 'offline',
+            response_type: 'code',
           },
         },
         profile(profile: GoogleProfile) {
