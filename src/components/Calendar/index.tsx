@@ -18,7 +18,12 @@ interface CalendarWeek {
 
 type CalendarWeeks = CalendarWeek[]
 
-export function Calendar() {
+interface CalendarDaysProps {
+  selectedDate?: Date | null
+  onDateSelect: (date: Date) => void
+}
+
+export function Calendar({ onDateSelect }: CalendarDaysProps) {
   const [currentDate, setCurrentDate] = useState(() => dayjs().set('date', 1))
   const shortWeekDays = getWeekDays({ short: true })
   const currentMonth = currentDate.format('MMMM')
@@ -96,6 +101,7 @@ export function Calendar() {
                 <td key={day?.toString() || index}>
                   {day !== null ? (
                     <CalendarDay
+                      onClick={() => onDateSelect(day.toDate())}
                       disabled={day.endOf('day').isBefore(new Date())}
                     >
                       {day?.get('date')}
