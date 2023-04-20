@@ -96,9 +96,7 @@ export function Calendar() {
                 <td key={day?.toString() || index}>
                   {day !== null ? (
                     <CalendarDay>{day?.get('date')}</CalendarDay>
-                  ) : (
-                    <td />
-                  )}
+                  ) : null}
                 </td>
               ))}
             </tr>
