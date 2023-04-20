@@ -95,7 +95,11 @@ export function Calendar() {
               {days.map((day, index) => (
                 <td key={day?.toString() || index}>
                   {day !== null ? (
-                    <CalendarDay>{day?.get('date')}</CalendarDay>
+                    <CalendarDay
+                      disabled={day.endOf('day').isBefore(new Date())}
+                    >
+                      {day?.get('date')}
+                    </CalendarDay>
                   ) : null}
                 </td>
               ))}
