@@ -23,6 +23,7 @@ type CalendarWeeks = CalendarWeek[]
 
 interface BlockedDates {
   blockedWeekDays: number[]
+  blockedDates: number[]
 }
 
 interface CalendarDaysProps {
@@ -47,7 +48,7 @@ export function Calendar({ onDateSelect }: CalendarDaysProps) {
         {
           params: {
             year: currentDate.get('year'),
-            month: currentDate.get('month'),
+            month: currentDate.get('month') + 1,
           },
         },
       )
@@ -125,21 +126,25 @@ export function Calendar({ onDateSelect }: CalendarDaysProps) {
         <tbody>
           {calendarWeeks.map(({ week, days }) => (
             <tr key={week}>
-              {days.map((day, index) => (
-                <td key={day?.toString() || index}>
-                  {day !== null ? (
+              {days.map((day, index) => {
+                if (day === null) return <td key={index} />
+
+                const disabledDay =
+                  day.endOf('day').isBefore(new Date()) ||
+                  blockedDates?.blockedWeekDays.includes(day.get('day')) ||
+                  blockedDates?.blockedDates.includes(day.get('date'))
+
+                return (
+                  <td key={day.toString()}>
                     <CalendarDay
                       onClick={() => onDateSelect(day.toDate())}
-                      disabled={
-                        day.endOf('day').isBefore(new Date()) ||
-                        blockedDates?.blockedWeekDays.includes(day.get('day'))
-                      }
+                      disabled={disabledDay}
                     >
                       {day?.get('date')}
                     </CalendarDay>
-                  ) : null}
-                </td>
-              ))}
+                  </td>
+                )
+              })}
             </tr>
           ))}
         </tbody>
