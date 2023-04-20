@@ -38,6 +38,7 @@ export const TimePickerHeader = styled(Text, {
 
   span: {
     color: '$gray200',
+    textTransform: 'none',
   },
 })
 
